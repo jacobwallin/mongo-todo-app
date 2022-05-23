@@ -1,6 +1,6 @@
 import "./App.css";
 import { useEffect, useState } from "react";
-import Todo from "./Todo";
+import Todo from "./todo/Todo";
 
 function App() {
   useEffect(() => {
@@ -21,7 +21,12 @@ function App() {
 
   return (
     <div className="App">
-      <Todo title="mow the lawn" />
+      <h1>My Todos</h1>
+      <div id="todos">
+        <Todo title="mow the lawn" handleComplete={completeTodo} />
+        <Todo title="do dishes" handleComplete={completeTodo} />
+        <Todo title="homework" handleComplete={completeTodo} />
+      </div>
     </div>
   );
 }

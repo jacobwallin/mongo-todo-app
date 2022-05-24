@@ -9,6 +9,7 @@ import axios from "axios";
 
 function App() {
   const [todos, setTodos] = useState([]);
+  const [completedTodos, setCompletedTodos] = useState([]);
   const [showCreate, setShowCreate] = useState(false);
   const [showCompleted, setShowCompleted] = useState(false);
   const [snackbarState, setSnackbarState] = useState({
@@ -21,7 +22,8 @@ function App() {
   useEffect(() => {
     axios("/todos")
       .then((response) => {
-        setTodos(response.data);
+        setTodos(response.data.filter((t) => t.completed === false));
+        setCompletedTodos(response.data.filter((t) => t.completed === true));
       })
       .catch((err) => {
         console.log(err.message);
@@ -64,8 +66,6 @@ function App() {
           })
         );
       });
-
-    // if successfull move to completed
   }
 
   function createTodo(e) {
@@ -198,7 +198,7 @@ function App() {
         </Button>
         {showCompleted && (
           <div id="completed-todos">
-            {todos.map((t) => {
+            {completedTodos.map((t) => {
               return (
                 <Todo
                   key={t._id}

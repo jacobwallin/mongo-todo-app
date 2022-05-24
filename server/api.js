@@ -3,7 +3,6 @@ const Todo = require("./model");
 
 router.get("/", async (req, res, next) => {
   const todos = await Todo.find({ ip: req.ip });
-
   res.json(todos);
 });
 

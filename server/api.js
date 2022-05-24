@@ -1,15 +1,35 @@
 const router = require("express").Router();
 const Todo = require("./model");
+const axios = require("axios");
 
 router.get("/", async (req, res, next) => {
   const todos = await Todo.find({ ip: req.ip });
-  res.json(todos);
+
+  // seed database for user if there are no todos
+  if (todos.length === 0) {
+    const mockTodos = await axios.get(process.env.MOCKAROO);
+
+    const newTodos = await Promise.all(
+      mockTodos.data.map((t) => {
+        const newTodo = new Todo({
+          ip: req.ip,
+          title: t.title,
+          completed: t.completed,
+        });
+
+        return newTodo.save();
+      })
+    );
+    res.json(newTodos);
+  } else {
+    res.json(todos);
+  }
 });
 
 router.post("/", async (req, res, next) => {
   const { title } = req.body;
   try {
-    const newTodo = await new Todo({
+    const newTodo = new Todo({
       ip: req.ip,
       title,
       completed: false,

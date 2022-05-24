@@ -31,7 +31,7 @@ function App() {
   }, []);
 
   function completeTodo(todoId) {
-    // set todo as completed
+    // set todo as completed so box is checked while waiting for server response
     setTodos(
       todos.map((t) => {
         if (t._id === todoId) {
@@ -43,6 +43,7 @@ function App() {
     axios
       .put(`/todos/${todoId}`, { completed: true })
       .then((response) => {
+        // move todo to completed state
         const completedTodo = todos.find((t) => t._id === todoId);
         if (completeTodo) {
           setTodos(todos.filter((t) => t._id !== completedTodo._id));
@@ -51,7 +52,6 @@ function App() {
             ...completedTodos,
           ]);
         }
-
         setSnackbarState({
           open: true,
           message: "Todo completed",

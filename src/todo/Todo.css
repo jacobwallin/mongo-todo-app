@@ -1,7 +1,6 @@
 .todo-wrapper {
   height: 35px;
   width: 100%;
-  max-width: 500px;
   border: 1px solid lightgray;
   border-radius: 5px;
   display: flex;

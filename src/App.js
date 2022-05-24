@@ -1,17 +1,17 @@
 import "./App.css";
 import { useEffect, useState } from "react";
 import Todo from "./todo/Todo";
+import Snackbar from "@mui/material/Snackbar";
+import Button from "@mui/material/Button";
 import axios from "axios";
 
 function App() {
   const [todos, setTodos] = useState([]);
 
   useEffect(() => {
-    // get request for all todos
     axios("/todos")
       .then((response) => {
         setTodos(response.data);
-        console.log("GOT TODOS:", response.data);
       })
       .catch((err) => {
         console.log(err.message);
@@ -19,26 +19,65 @@ function App() {
   }, []);
 
   function completeTodo(todoId) {
-    // put request
+    axios
+      .put(`/todos/${todoId}`, { complete: true })
+      .then((response) => {
+        setTodos(todos.filter((t) => t.id !== todoId));
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
   }
 
-  function createTodo() {
-    // post request
+  function createTodo(title) {
+    axios
+      .post("/todos", {
+        title,
+      })
+      .then((response) => {
+        setTodos([...todos, response.data]);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
   }
 
   function deleteTodo(todoId) {
-    // delete request
+    axios
+      .delete(`/todos/${todoId}`)
+      .then((response) => {
+        setTodos(todos.filter((t) => t.id !== todoId));
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
   }
 
   return (
     <div className="App">
-      <h1>My Todos</h1>
-      <div id="todos">
-        {todos.map((t) => {
-          return (
-            <Todo key={t.id} title={t.title} handleComplete={completeTodo} />
-          );
-        })}
+      <div id="app-container">
+        <div id="header">
+          <h1>My Todos</h1>
+          <div id="create-button">
+            <Button variant="contained" color="success" size="small">
+              Add Todo
+            </Button>
+          </div>
+        </div>
+        <div id="todos">
+          {todos.map((t) => {
+            return (
+              <Todo key={t._id} title={t.title} handleComplete={completeTodo} />
+            );
+          })}
+        </div>
+        {/* <Snackbar
+        open={open}
+        autoHideDuration={6000}
+        onClose={handleClose}
+        message="Note archived"
+        action={action}
+      /> */}
       </div>
     </div>
   );

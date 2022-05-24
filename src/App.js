@@ -10,6 +10,7 @@ import axios from "axios";
 function App() {
   const [todos, setTodos] = useState([]);
   const [showCreate, setShowCreate] = useState(false);
+  const [showCompleted, setShowCompleted] = useState(false);
   const [snackbarState, setSnackbarState] = useState({
     oprn: false,
     message: "",
@@ -122,12 +123,23 @@ function App() {
     setShowCreate(!showCreate);
   }
 
+  function toggleShowCompleted() {
+    setShowCompleted(!showCompleted);
+  }
+
   function handleTitleChange(e) {
     setNewTodoTitle(e.target.value);
   }
 
   return (
     <div className="App">
+      <Snackbar
+        open={snackbarState.open}
+        autoHideDuration={3000}
+        onClose={snackbarClose}
+      >
+        <Alert severity={snackbarState.severity}>{snackbarState.message}</Alert>
+      </Snackbar>
       <div id="app-container">
         <div id="header">
           <h1>My Todos</h1>
@@ -181,15 +193,25 @@ function App() {
             );
           })}
         </div>
-        <Snackbar
-          open={snackbarState.open}
-          autoHideDuration={3000}
-          onClose={snackbarClose}
-        >
-          <Alert severity={snackbarState.severity}>
-            {snackbarState.message}
-          </Alert>
-        </Snackbar>
+        <Button variant="text" size="small" onClick={toggleShowCompleted}>
+          {showCompleted ? "Hide Completed" : "Show Completed"}
+        </Button>
+        {showCompleted && (
+          <div id="completed-todos">
+            {todos.map((t) => {
+              return (
+                <Todo
+                  key={t._id}
+                  id={t._id}
+                  title={t.title}
+                  completed={t.completed}
+                  handleComplete={completeTodo}
+                  handleDelete={deleteTodo}
+                />
+              );
+            })}
+          </div>
+        )}
       </div>
     </div>
   );

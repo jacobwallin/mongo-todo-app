@@ -108,6 +108,7 @@ function App() {
       .delete(`/todos/${todoId}`)
       .then((response) => {
         setTodos(todos.filter((t) => t._id !== todoId));
+        setCompletedTodos(completedTodos.filter((t) => t._id !== todoId));
         setSnackbarState({
           open: true,
           message: "Todo deleted",

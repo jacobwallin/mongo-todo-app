@@ -28,14 +28,43 @@ function App() {
   }, []);
 
   function completeTodo(todoId) {
+    // set todo as completed
+    setTodos(
+      todos.map((t) => {
+        if (t._id === todoId) {
+          return { ...t, completed: true };
+        }
+        return t;
+      })
+    );
     axios
-      .put(`/todos/${todoId}`, { complete: true })
+      .put(`/todos/${todoId}`, { completed: true })
       .then((response) => {
-        setTodos(todos.filter((t) => t.id !== todoId));
+        setSnackbarState({
+          open: true,
+          message: "Todo completed",
+          severity: "success",
+        });
       })
       .catch((err) => {
         console.log(err.message);
+        setSnackbarState({
+          open: true,
+          message: "Error completing todo",
+          severity: "warning",
+        });
+        // reset todo to be incomplete in state if request fails
+        setTodos(
+          todos.map((t) => {
+            if (t._id === todoId) {
+              return { ...t, completed: false };
+            }
+            return t;
+          })
+        );
       });
+
+    // if successfull move to completed
   }
 
   function createTodo() {
@@ -130,7 +159,14 @@ function App() {
         <div id="todos">
           {todos.map((t) => {
             return (
-              <Todo key={t._id} title={t.title} handleComplete={completeTodo} />
+              <Todo
+                key={t._id}
+                id={t._id}
+                title={t.title}
+                completed={t.completed}
+                handleComplete={completeTodo}
+                handleDelete={deleteTodo}
+              />
             );
           })}
         </div>

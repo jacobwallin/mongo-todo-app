@@ -16,3 +16,14 @@ input.completed {
   display: flex;
   gap: 10px;
 }
+
+.delete-todo {
+  width: 20px;
+  height: 20px;
+  margin-right: 3px;
+  cursor: pointer;
+}
+
+.delete-todo:hover .ex {
+  fill: gray;
+}

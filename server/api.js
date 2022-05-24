@@ -42,7 +42,7 @@ router.put("/:todoId", async (req, res, next) => {
 
 router.delete("/:todoId", async (req, res, next) => {
   try {
-    const deleteCount = await Todo.deleteOne({ id: req.params.id });
+    const deleteCount = await Todo.deleteOne({ _id: req.params.id });
 
     res.json(deleteCount);
   } catch (error) {

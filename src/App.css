@@ -38,3 +38,12 @@ h1 {
   position: absolute;
   right: 0;
 }
+
+#create-todo {
+  display: flex;
+  gap: 15px;
+  width: 100%;
+  height: auto;
+  justify-content: flex-end;
+  margin: 25px 0 20px 0;
+}

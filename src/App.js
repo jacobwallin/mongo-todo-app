@@ -3,10 +3,18 @@ import { useEffect, useState } from "react";
 import Todo from "./todo/Todo";
 import Snackbar from "@mui/material/Snackbar";
 import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
 import axios from "axios";
 
 function App() {
   const [todos, setTodos] = useState([]);
+  const [showCreate, setShowCreate] = useState(false);
+  const [snackbarState, setSnackbarState] = useState({
+    oprn: false,
+    message: "",
+    severity: "",
+  });
+  const [newTodoTitle, setNewTodoTitle] = useState("");
 
   useEffect(() => {
     axios("/todos")
@@ -36,9 +44,18 @@ function App() {
       })
       .then((response) => {
         setTodos([...todos, response.data]);
+        setSnackbarState({
+          open: true,
+          message: "Todo created",
+          severity: "success",
+        });
       })
       .catch((err) => {
-        console.log(err.message);
+        setSnackbarState({
+          open: true,
+          message: "Error creating todo",
+          severity: "error",
+        });
       });
   }
 
@@ -53,17 +70,58 @@ function App() {
       });
   }
 
+  function snackbarClose() {
+    setSnackbarState({ open: false, message: "", severity: "" });
+  }
+
+  function toggleCreate() {
+    setShowCreate(!showCreate);
+  }
+
+  function handleTitleChange(e) {
+    setNewTodoTitle(e.target.value);
+  }
+
   return (
     <div className="App">
       <div id="app-container">
         <div id="header">
           <h1>My Todos</h1>
-          <div id="create-button">
-            <Button variant="contained" color="success" size="small">
-              Add Todo
+          {showCreate ? (
+            <div id="create-button">
+              <Button variant="contained" size="small" onClick={toggleCreate}>
+                Close
+              </Button>
+            </div>
+          ) : (
+            <div id="create-button">
+              <Button variant="contained" size="small" onClick={toggleCreate}>
+                Add Todo
+              </Button>
+            </div>
+          )}
+        </div>
+        {showCreate && (
+          <div id="create-todo">
+            <TextField
+              id="standard-basic"
+              label="new todo"
+              variant="outlined"
+              size="small"
+              fullWidth
+              value={newTodoTitle}
+              onChange={handleTitleChange}
+            />
+            <Button
+              variant="contained"
+              color="success"
+              size="small"
+              onClick={createTodo}
+            >
+              Create
             </Button>
           </div>
-        </div>
+        )}
         <div id="todos">
           {todos.map((t) => {
             return (
@@ -71,13 +129,13 @@ function App() {
             );
           })}
         </div>
-        {/* <Snackbar
-        open={open}
-        autoHideDuration={6000}
-        onClose={handleClose}
-        message="Note archived"
-        action={action}
-      /> */}
+        <Snackbar
+          open={snackbarState.open}
+          autoHideDuration={3000}
+          onClose={snackbarClose}
+          message={snackbarState.message}
+          severity={snackbarState.severity}
+        />
       </div>
     </div>
   );

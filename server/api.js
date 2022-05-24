@@ -25,12 +25,11 @@ router.post("/", async (req, res, next) => {
 });
 
 router.put("/:todoId", async (req, res, next) => {
-  const { title, completed } = req.body;
+  const { completed } = req.body;
 
   try {
     const todo = await Todo.findById(req.params.todoId);
 
-    todo.title = title;
     todo.completed = completed;
 
     await todo.save();

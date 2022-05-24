@@ -97,10 +97,20 @@ function App() {
     axios
       .delete(`/todos/${todoId}`)
       .then((response) => {
-        setTodos(todos.filter((t) => t.id !== todoId));
+        setTodos(todos.filter((t) => t._id !== todoId));
+        setSnackbarState({
+          open: true,
+          message: "Todo deleted",
+          severity: "success",
+        });
       })
       .catch((err) => {
         console.log(err.message);
+        setSnackbarState({
+          open: true,
+          message: "Error deleting",
+          severity: "warning",
+        });
       });
   }
 

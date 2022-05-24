@@ -67,7 +67,8 @@ function App() {
     // if successfull move to completed
   }
 
-  function createTodo() {
+  function createTodo(e) {
+    e.preventDefault();
     axios
       .post("/todos", {
         title: newTodoTitle,
@@ -135,7 +136,7 @@ function App() {
           )}
         </div>
         {showCreate && (
-          <div id="create-todo">
+          <form id="create-todo" onSubmit={createTodo}>
             <TextField
               id="standard-basic"
               label="new todo"
@@ -149,12 +150,12 @@ function App() {
               variant="contained"
               color="success"
               size="small"
-              onClick={createTodo}
               disabled={newTodoTitle.length === 0}
+              type="submit"
             >
               Create
             </Button>
-          </div>
+          </form>
         )}
         <div id="todos">
           {todos.map((t) => {

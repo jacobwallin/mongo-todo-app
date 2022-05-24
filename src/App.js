@@ -43,6 +43,15 @@ function App() {
     axios
       .put(`/todos/${todoId}`, { completed: true })
       .then((response) => {
+        const completedTodo = todos.find((t) => t._id === todoId);
+        if (completeTodo) {
+          setTodos(todos.filter((t) => t._id !== completedTodo._id));
+          setCompletedTodos([
+            { ...completedTodo, completed: true },
+            ...completedTodos,
+          ]);
+        }
+
         setSnackbarState({
           open: true,
           message: "Todo completed",

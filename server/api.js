@@ -8,7 +8,7 @@ router.get("/", async (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
   const { title } = req.body;
-
+  console.log(req.body);
   try {
     const newTodo = await new Todo({
       ip: req.ip,

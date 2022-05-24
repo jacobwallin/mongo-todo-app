@@ -37,10 +37,10 @@ function App() {
       });
   }
 
-  function createTodo(title) {
+  function createTodo() {
     axios
       .post("/todos", {
-        title,
+        title: newTodoTitle,
       })
       .then((response) => {
         setTodos([...todos, response.data]);
@@ -51,6 +51,7 @@ function App() {
         });
       })
       .catch((err) => {
+        console.log(err.message);
         setSnackbarState({
           open: true,
           message: "Error creating todo",
@@ -117,6 +118,7 @@ function App() {
               color="success"
               size="small"
               onClick={createTodo}
+              disabled={newTodoTitle.length === 0}
             >
               Create
             </Button>

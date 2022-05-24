@@ -12,7 +12,7 @@
   max-width: 500px;
 }
 
-#todos {
+.todos {
   display: flex;
   flex-direction: column;
   gap: 3px;

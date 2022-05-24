@@ -179,7 +179,7 @@ function App() {
             </Button>
           </form>
         )}
-        <div id="todos">
+        <div className="todos">
           {todos.map((t) => {
             return (
               <Todo
@@ -197,7 +197,7 @@ function App() {
           {showCompleted ? "Hide Completed" : "Show Completed"}
         </Button>
         {showCompleted && (
-          <div id="completed-todos">
+          <div className="todos">
             {completedTodos.map((t) => {
               return (
                 <Todo

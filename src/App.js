@@ -4,6 +4,7 @@ import Todo from "./todo/Todo";
 import Snackbar from "@mui/material/Snackbar";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
+import Alert from "@mui/material/Alert";
 import axios from "axios";
 
 function App() {
@@ -12,7 +13,7 @@ function App() {
   const [snackbarState, setSnackbarState] = useState({
     oprn: false,
     message: "",
-    severity: "",
+    severity: "success",
   });
   const [newTodoTitle, setNewTodoTitle] = useState("");
 
@@ -44,6 +45,8 @@ function App() {
       })
       .then((response) => {
         setTodos([...todos, response.data]);
+        setNewTodoTitle("");
+        setShowCreate(false);
         setSnackbarState({
           open: true,
           message: "Todo created",
@@ -55,7 +58,7 @@ function App() {
         setSnackbarState({
           open: true,
           message: "Error creating todo",
-          severity: "error",
+          severity: "warning",
         });
       });
   }
@@ -72,7 +75,7 @@ function App() {
   }
 
   function snackbarClose() {
-    setSnackbarState({ open: false, message: "", severity: "" });
+    setSnackbarState({ open: false, message: "", severity: "success" });
   }
 
   function toggleCreate() {
@@ -135,9 +138,11 @@ function App() {
           open={snackbarState.open}
           autoHideDuration={3000}
           onClose={snackbarClose}
-          message={snackbarState.message}
-          severity={snackbarState.severity}
-        />
+        >
+          <Alert severity={snackbarState.severity}>
+            {snackbarState.message}
+          </Alert>
+        </Snackbar>
       </div>
     </div>
   );
